@@ -33,5 +33,25 @@ public class Script implements IOrderedItem {
 
 	public ZonedDateTime getDateCreatedUtc() { return _dateCreatedUtc; }
 	public void setDateCreatedUtc(ZonedDateTime value) { _dateCreatedUtc = value; }
+	
+	@Override
+	public int hashCode() {
+		return _sysId.hashCode();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		
+	}
 
+	private static bool isEqual(Script scriptA, Script scriptB) {
+		return (
+			scriptA.getSysId().equals(scriptB.getSysId()) &&
+			scriptA.isScriptComplete().equals(scriptB.isScriptComplete()) &&
+			scriptA.getDateCreatedUtc().equals(scriptB.getDateCreatedUtc()) &&
+			scriptA.getExecutorName().equals(scriptB.getExecutorName()) &&
+			scriptA.getDocumentId().equals(scriptB.getDocumentId()) &&
+			scriptA.getOrder().equals(scriptB.getOrder())
+		);
+	}
 }

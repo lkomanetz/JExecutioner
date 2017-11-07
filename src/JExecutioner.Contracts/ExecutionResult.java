@@ -10,5 +10,19 @@ public class ExecutionResult {
 
 	public int getScriptsCompletedCount() { return _scriptsCompleted; }
 	public void setScriptsCompletedCount(int value) { _scriptsCompleted = value; }
+	
+	
+	@Override
+	public int hashCode() {
+		return (++_scriptDocsCompleted * ++_scriptsCompleted) / 11;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		ExecutionResult resultB = (obj instanceof ExecutionResult) ? (ExecutionResult)obj : null;
+		if (resultB == null) return false;
+		
+		return resultB == this;
+	}
 
 }
