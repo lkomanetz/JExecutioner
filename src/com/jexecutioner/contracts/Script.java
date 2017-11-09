@@ -41,17 +41,19 @@ public class Script implements IOrderedItem {
 	
 	@Override
 	public boolean equals(Object obj) {
-		
+		Script scriptB = (obj instanceof Script) ? (Script)obj : null;
+		if (scriptB == null) return false;
+		return isEqual(this, scriptB);
 	}
 
-	private static bool isEqual(Script scriptA, Script scriptB) {
+	private boolean isEqual(Script scriptA, Script scriptB) {
 		return (
 			scriptA.getSysId().equals(scriptB.getSysId()) &&
 			scriptA.isScriptComplete().equals(scriptB.isScriptComplete()) &&
 			scriptA.getDateCreatedUtc().equals(scriptB.getDateCreatedUtc()) &&
 			scriptA.getExecutorName().equals(scriptB.getExecutorName()) &&
 			scriptA.getDocumentId().equals(scriptB.getDocumentId()) &&
-			scriptA.getOrder().equals(scriptB.getOrder())
+			scriptA.getOrder() == scriptB.getOrder()
 		);
 	}
 }
