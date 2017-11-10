@@ -15,6 +15,7 @@ class ScriptClassTests {
 	private UUID _scriptId;
 	private String _executorName;
 	private int _order;
+	private String _scriptText;
 	
 	@BeforeEach
 	void setup() {
@@ -23,6 +24,7 @@ class ScriptClassTests {
 		_docId = UUID.randomUUID();
 		_scriptId = UUID.randomUUID();
 		_order = 0;
+		_scriptText = "";
 	}
 
 	@Test
@@ -35,25 +37,37 @@ class ScriptClassTests {
 	}
 	
 	@Test
-	void toStringFormatsPropertyWithOrder() {
+	void toStringFormatsProperlyWithOrder() {
 		Script script = createScript();
 		script.setOrder(++_order);
 		String expectedStr = getExpectedString();
-		
+		Assert.assertTrue(expectedStr.equals(script.toString()));
+	}
+	
+	@Test
+	void toStringFormatsProperlyWithEverything() {
+		_scriptText = "SELECT * FROM Table";
+		Script script = createScript();
+		script.setOrder(++_order);
+		script.setScriptText(_scriptText);
+		String expectedStr = getExpectedString();
 		Assert.assertTrue(expectedStr.equals(script.toString()));
 	}
 	
 	private String getExpectedString() {
 		DateTimeFormatter dtFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		String formattedDate = dtFormatter.format(_now);
-		StringBuilder expectedStr = new StringBuilder();
 		String orderStr = (_order != 0) ? 
 			String.format("%s:%d", formattedDate, _order) :
 			String.format("%s", formattedDate);
 		
-		expectedStr.append(String.format("<Script Id='%s' Executor='%s' Order='%s'>\n", _scriptId, _executorName, orderStr));
-		expectedStr.append("</Script>\n");
-		return expectedStr.toString();
+		return String.format(
+			"<Script Id='%s' Executor='%s' Order='%s'>\n%s\n</Script>\n",
+			_scriptId,
+			_executorName,
+			orderStr,
+			_scriptText
+		);
 	}
 	
 	private Script createScript() {

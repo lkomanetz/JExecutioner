@@ -45,7 +45,14 @@ public class Script implements IOrderedItem {
 	public boolean equals(Object obj) {
 		Script scriptB = (obj instanceof Script) ? (Script)obj : null;
 		if (scriptB == null) return false;
-		return isEqual(this, scriptB);
+		return (
+			this.getSysId().equals(scriptB.getSysId()) &&
+			this.isScriptComplete().equals(scriptB.isScriptComplete()) &&
+			this.getDateCreatedUtc().equals(scriptB.getDateCreatedUtc()) &&
+			this.getExecutorName().equals(scriptB.getExecutorName()) &&
+			this.getDocumentId().equals(scriptB.getDocumentId()) &&
+			this.getOrder() == scriptB.getOrder()
+		);
 	}
 	
 	@Override
@@ -54,22 +61,13 @@ public class Script implements IOrderedItem {
 		String orderStr = dtFormat.format(_dateCreatedUtc);
 		if (_order != 0) orderStr += String.format(":%d", _order);
 
-		StringBuilder sb = new StringBuilder();
-		sb.append(String.format("<Script Id='%s' Executor='%s' Order='%s'>\n", _sysId, _executorName, orderStr));
-		sb.append((_scriptText != null) ? _scriptText : "");
-		sb.append("</Script>\n");
-		
-		return sb.toString();
-	}
-
-	private boolean isEqual(Script scriptA, Script scriptB) {
-		return (
-			scriptA.getSysId().equals(scriptB.getSysId()) &&
-			scriptA.isScriptComplete().equals(scriptB.isScriptComplete()) &&
-			scriptA.getDateCreatedUtc().equals(scriptB.getDateCreatedUtc()) &&
-			scriptA.getExecutorName().equals(scriptB.getExecutorName()) &&
-			scriptA.getDocumentId().equals(scriptB.getDocumentId()) &&
-			scriptA.getOrder() == scriptB.getOrder()
+		return String.format(
+			"<Script Id='%s' Executor='%s' Order='%s'>\n%s\n</Script>\n",
+			_sysId,
+			_executorName,
+			orderStr,
+			(_scriptText != null) ? _scriptText : ""
 		);
 	}
+
 }
