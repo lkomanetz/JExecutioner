@@ -1,7 +1,9 @@
 package com.jexecutioner.contracts;
 
 import java.util.*;
+
 import java.time.*;
+import java.time.format.*;
 
 public class Script implements IOrderedItem {
 
@@ -44,6 +46,20 @@ public class Script implements IOrderedItem {
 		Script scriptB = (obj instanceof Script) ? (Script)obj : null;
 		if (scriptB == null) return false;
 		return isEqual(this, scriptB);
+	}
+	
+	@Override
+	public String toString() {
+		DateTimeFormatter dtFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		String orderStr = dtFormat.format(_dateCreatedUtc);
+		if (_order != 0) orderStr += String.format(":%d", _order);
+
+		StringBuilder sb = new StringBuilder();
+		sb.append(String.format("<Script Id='%s' Executor='%s' Order='%s'>\n", _sysId, _executorName, orderStr));
+		sb.append((_scriptText != null) ? _scriptText : "");
+		sb.append("</Script>\n");
+		
+		return sb.toString();
 	}
 
 	private boolean isEqual(Script scriptA, Script scriptB) {

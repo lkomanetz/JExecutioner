@@ -2,23 +2,28 @@ package com.jexecutioner.contracts;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
-import com.jexecutioner.contracts.*;
 import java.io.*;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import org.junit.Assert;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 class ScriptLoaderTests {
+
+	private ZonedDateTime _now;
+
+	@BeforeEach
+	void setup() {
+		_now = ZonedDateTime.now(ZoneOffset.UTC);
+	}
 	
 	@Test
 	void scriptLoaderUtilityReturnsScriptDocument() {
 		try {
-			ZonedDateTime now = ZonedDateTime.now();
-			ScriptDocument sDoc = getScriptDocument(now, 0, new Script[] {});
-			if (sDoc == null) fail("ScriptDocument is null");
+			ScriptDocument sDoc = getScriptDocument(_now, 0, new Script[] {});
+			Assert.assertTrue(sDoc != null);
 		}
 		catch (Exception err) {
 			fail("Test Failed: " + err.getMessage());
@@ -28,9 +33,8 @@ class ScriptLoaderTests {
 	@Test
 	void scriptLoaderUtilityReturnsFilledInScriptDocument() {
 		try {
-			ZonedDateTime now = ZonedDateTime.now();
-			ScriptDocument sDoc = getScriptDocument(now, 0, new Script[] {});
-			Assert.assertTrue(sDoc.getDateCreatedUtc().equals(now));
+			ScriptDocument sDoc = getScriptDocument(_now, 0, new Script[] {});
+			Assert.assertTrue(sDoc.getDateCreatedUtc().equals(_now));
 		}
 		catch (Exception err) {
 			String msg = "Exception: " + err.getClass().getSimpleName();
