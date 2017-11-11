@@ -5,6 +5,6 @@ import com.jexecutioner.contracts.*;
 
 public interface ISorter {
 	
-	List<IOrderedItem> sort(List<IOrderedItem> collection);
+	List<IOrderedItem> sort(List<IOrderedItem> collection, List<Comparator<IOrderedItem>> comparers);
 	
 }
