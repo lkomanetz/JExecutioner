@@ -54,20 +54,5 @@ public class Script implements IOrderedItem {
 			this.getOrder() == scriptB.getOrder()
 		);
 	}
-	
-	@Override
-	public String toString() {
-		DateTimeFormatter dtFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		String orderStr = dtFormat.format(_dateCreatedUtc);
-		if (_order != 0) orderStr += String.format(":%d", _order);
-
-		return String.format(
-			"<Script Id='%s' Executor='%s' Order='%s'>\n%s\n</Script>\n",
-			_sysId,
-			_executorName,
-			orderStr,
-			(_scriptText != null) ? _scriptText : ""
-		);
-	}
 
 }
