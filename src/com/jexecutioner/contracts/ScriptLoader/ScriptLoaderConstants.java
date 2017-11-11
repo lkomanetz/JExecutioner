@@ -1,4 +1,4 @@
-package com.jexecutioner.contracts;
+package com.jexecutioner.contracts.ScriptLoader;
 
 public final class ScriptLoaderConstants {
 	

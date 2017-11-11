@@ -1,23 +1,29 @@
-package com.jexecutioner.contracts;
+package com.jexecutioner.contracts.ScriptLoader;
 
 import java.io.*;
 import java.time.*;
 import java.time.format.*;
-import java.time.temporal.ChronoField;
-import java.util.AbstractMap.SimpleEntry;
+import java.time.temporal.*;
+import java.util.AbstractMap.*;
 import java.util.*;
 
 import javax.xml.parsers.*;
 
 import org.w3c.dom.*;
 
-class ScriptLoaderUtilities {
+import com.jexecutioner.contracts.Script;
+import com.jexecutioner.contracts.ScriptDocument;
+
+public abstract class ScriptLoader {
 	
-	public static ScriptDocument createScriptDocument(InputStream iStream, String resourceName)
-		throws ParserConfigurationException
-		, IOException 
-		, Exception {
-		
+	public abstract List<ScriptDocument> getDocuments();
+	public abstract void loadDocuments();
+	
+	protected ScriptDocument createScriptDocument(InputStream iStream, String resourceName) throws 
+		ParserConfigurationException,
+		IOException,
+		Exception {
+
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 		Document xmlDoc = docBuilder.parse(iStream);
@@ -44,10 +50,9 @@ class ScriptLoaderUtilities {
 		}
 
 		return sDoc;
-		
 	}
 	
-	private static List<Script> createScripts(Element scriptElement, UUID docId) {
+	private List<Script> createScripts(Element scriptElement, UUID docId) {
 		NodeList scriptNodes = scriptElement.getElementsByTagName(ScriptLoaderConstants.SCRIPT_NODE);
 		
 		List<Script> scripts = new ArrayList<Script>();
@@ -71,8 +76,8 @@ class ScriptLoaderUtilities {
 
 		return scripts;
 	}
-
-	private static SimpleEntry<ZonedDateTime, Integer> parseOrderAttribute(String value) {
+	
+	private SimpleEntry<ZonedDateTime, Integer> parseOrderAttribute(String value) {
 		DateTimeFormatter dtFormatter = new DateTimeFormatterBuilder()
 			.appendPattern("yyyy-MM-dd['T'HH:mm:ss.SSSz]")
 			.parseDefaulting(ChronoField.HOUR_OF_DAY, 0)
@@ -104,6 +109,6 @@ class ScriptLoaderUtilities {
 		}
 
 		return new SimpleEntry<ZonedDateTime, Integer>(orderDate, order);
-}
+	}
 
 }

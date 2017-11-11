@@ -2,7 +2,9 @@ package com.jexecutioner.contracts;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.io.*;
+import com.jexecutioner.contracts.ScriptLoader.ScriptLoader;
+import com.jexecutioner.contracts.ScriptLoaders.*;
+
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -17,25 +19,36 @@ class ScriptLoaderTests {
 
 	@BeforeEach
 	void setup() {
-		_now = ZonedDateTime.now(ZoneOffset.UTC);
+		ZonedDateTime tmp = ZonedDateTime.now(ZoneOffset.UTC);
+		_now = ZonedDateTime.of(tmp.getYear(), tmp.getMonthValue(), tmp.getDayOfMonth(), 0, 0 , 0, 0, tmp.getZone());
 		_sysId = UUID.randomUUID();
 	}
 	
 	@Test
-	void scriptLoaderUtilityReturnsScriptDocument() {
+	void baseScriptLoaderCreatesDocuments() {
 		try {
-			ScriptDocument sDoc = getScriptDocument(_now, 0, new Script[] {});
-			Assert.assertTrue(sDoc != null);
+			int scriptCount = 4;
+			int order = 0;
+			String xml = buildScriptDocumentXml(_now, order, scriptCount);
+			ScriptLoader loader = new TestScriptLoader(xml);
+			loader.loadDocuments();
+			
+			List<ScriptDocument> sDocs = loader.getDocuments();
+			Assert.assertTrue(sDocs.isEmpty() == false && sDocs.size() == 1);
+			
+			ScriptDocument sDoc = sDocs.get(0);
+			Assert.assertTrue(sDoc.getScripts().size() == scriptCount);
+			Assert.assertTrue(sDoc.getOrder() == order);
+			Assert.assertTrue(sDoc.getDateCreatedUtc().equals(_now));
 		}
 		catch (Exception err) {
-			fail("Test Failed: " + err.getMessage());
+			String msg = String.format("Exception: %s Message: %s", err.getClass().getSimpleName(), err.getMessage());
+			fail(msg);
 		}
 	}
 	
-	@Test
-	void scriptLoaderUtilityReturnsFilledInScriptDocument() {
-		try {
-			Script[] scripts = new Script[4];
+	private String buildScriptDocumentXml(ZonedDateTime date, int order, int scriptCount) {
+			Script[] scripts = new Script[scriptCount];
 			for (short i = 0; i < scripts.length; ++i) {
 				scripts[i] = new Script();
 				scripts[i].setDateCreatedUtc(ZonedDateTime.now(ZoneOffset.UTC));
@@ -43,38 +56,13 @@ class ScriptLoaderTests {
 				scripts[i].setSysId(UUID.randomUUID());
 				scripts[i].setScriptText("SELECT * FROM Table");
 			}
+			ScriptDocument sDoc = new ScriptDocument();
+			sDoc.setScripts(Arrays.asList(scripts));
+			sDoc.setSysId(_sysId);
+			sDoc.setOrder(order);
+			sDoc.setDateCreatedUtc(_now);
 			
-			ScriptDocument sDoc = getScriptDocument(_now, 0, scripts);
-			Assert.assertTrue(
-				sDoc.getDateCreatedUtc().getYear() == _now.getYear() &&
-				sDoc.getDateCreatedUtc().getMonth().equals(_now.getMonth()) &&
-				sDoc.getDateCreatedUtc().getDayOfYear() == _now.getDayOfYear()
-			);
-			Assert.assertTrue(sDoc.getScripts().size() == scripts.length);
-			for (Script script : sDoc.getScripts()) {
-				Assert.assertTrue(script.getScriptText().length() > 0);
-				Assert.assertTrue(script.getDocumentId().equals(sDoc.getSysId()));
-			}
-			Assert.assertTrue(sDoc.getSysId().equals(_sysId));
-		}
-		catch (Exception err) {
-			String msg = "Exception: " + err.getClass().getSimpleName();
-			msg += "Message: " + err.getMessage();
-			fail(msg);
-		}
-	}
-	
-	private ScriptDocument getScriptDocument(ZonedDateTime date, int order, Script[] scripts) 
-		throws Exception {
-
-		ScriptDocument sDoc = new ScriptDocument();
-		sDoc.setDateCreatedUtc(date);
-		sDoc.setSysId(_sysId);
-		sDoc.setOrder(order);
-		sDoc.setScripts(Arrays.asList(scripts));
-		
-		InputStream iStream = new ByteArrayInputStream(toString(sDoc).getBytes());
-		return ScriptLoaderUtilities.createScriptDocument(iStream, new String(""));
+			return toString(sDoc);
 	}
 	
 	private String toString(ScriptDocument doc) {
