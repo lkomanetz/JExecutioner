@@ -26,11 +26,7 @@ class SorterTests {
 		comparers.add(new DateComparer());
 
 		List<IOrderedItem> sortedList = new ItemSorter().sort(Arrays.asList(items), comparers);
-		
-		Assert.assertTrue(((SimpleOrderedItem)sortedList.get(0)).getId() == 'a');
-		Assert.assertTrue(((SimpleOrderedItem)sortedList.get(1)).getId() == 'b');
-		Assert.assertTrue(((SimpleOrderedItem)sortedList.get(2)).getId() == 'c');
-		Assert.assertTrue(((SimpleOrderedItem)sortedList.get(3)).getId() == 'd');
+		assertOrder(sortedList, "abcd");
 	}
 	
 	@Test
@@ -47,11 +43,7 @@ class SorterTests {
 		comparers.add(new OrderComparer());
 		
 		List<IOrderedItem> sortedList = new ItemSorter().sort(Arrays.asList(items), comparers);
-		
-		Assert.assertTrue(((SimpleOrderedItem)sortedList.get(0)).getId() == 'a');
-		Assert.assertTrue(((SimpleOrderedItem)sortedList.get(1)).getId() == 'b');
-		Assert.assertTrue(((SimpleOrderedItem)sortedList.get(2)).getId() == 'c');
-		Assert.assertTrue(((SimpleOrderedItem)sortedList.get(3)).getId() == 'd');
+		assertOrder(sortedList, "abcd");
 	}
 	
 	@Test
@@ -70,10 +62,15 @@ class SorterTests {
 
 		List<IOrderedItem> sortedList = new ItemSorter().sort(Arrays.asList(items), comparers);
 
-		Assert.assertTrue(((SimpleOrderedItem)sortedList.get(0)).getId() == 'a');
-		Assert.assertTrue(((SimpleOrderedItem)sortedList.get(1)).getId() == 'b');
-		Assert.assertTrue(((SimpleOrderedItem)sortedList.get(2)).getId() == 'c');
-		Assert.assertTrue(((SimpleOrderedItem)sortedList.get(3)).getId() == 'd');
+		assertOrder(sortedList, "abcd");
+	}
+	
+	private void assertOrder(List<IOrderedItem> sortedList, String expectedIdOrder) {
+		Assert.assertTrue(sortedList.size() == expectedIdOrder.length());
+		for (short i = 0; i < expectedIdOrder.length(); ++i) {
+			SimpleOrderedItem item = (SimpleOrderedItem)sortedList.get(i);
+			Assert.assertTrue(item.getId() == expectedIdOrder.charAt(i));
+		}
 	}
 
 }
