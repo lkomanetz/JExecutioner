@@ -1,6 +1,7 @@
 package com.jexecutioner.contracts.ScriptLoader;
 
 import java.io.*;
+
 import java.time.*;
 import java.time.format.*;
 import java.time.temporal.*;
@@ -13,6 +14,7 @@ import org.w3c.dom.*;
 
 import com.jexecutioner.contracts.*;
 import com.jexecutioner.sorters.*;
+import com.jexecutioner.converters.*;
 
 public abstract class ScriptLoader {
 	
@@ -42,9 +44,10 @@ public abstract class ScriptLoader {
 
 			switch (childElement.getNodeName()) {
 				case ScriptLoaderConstants.SCRIPTS_NODE:
-					List<Script> scripts = createScripts(childElement, sDoc.getSysId());
-					scripts = _sorter.sort(scripts);
-					sDoc.setScripts(scripts);
+					List<? extends IOrderedItem> scripts = createScripts(childElement, sDoc.getSysId());
+					List<? extends IOrderedItem> sortedItems = _sorter.sort(scripts);
+					List<Script> sortedScripts = Converters.toScripts.convert(sortedItems);
+					sDoc.setScripts(sortedScripts);
 					break;
 				case ScriptLoaderConstants.DOCUMENT_ORDER_NODE:
 					SimpleEntry<ZonedDateTime, Integer> dateOrderPair = parseOrderAttribute(childElement.getTextContent());

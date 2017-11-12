@@ -15,34 +15,33 @@ class SorterTests {
 	@Test
 	void itemsSortedByDate() {
 		ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
-		SimpleOrderedItem[] items = new SimpleOrderedItem[] {
-			new SimpleOrderedItem('c', 0, now.plusDays(1)),
-			new SimpleOrderedItem('d', 0, now.plusMonths(1)),
-			new SimpleOrderedItem('b', 0, now),
-			new SimpleOrderedItem('a', 0, now.minusDays(1))
-		};
+		List<SimpleOrderedItem> items = new ArrayList<>();
+
+		items.add(new SimpleOrderedItem('c', 0, now.plusDays(1)));
+		items.add(new SimpleOrderedItem('d', 0, now.plusMonths(1)));
+		items.add(new SimpleOrderedItem('b', 0, now));
+		items.add(new SimpleOrderedItem('a', 0, now.minusDays(1)));
 		
 		List<Comparator<IOrderedItem>> comparers = new ArrayList<Comparator<IOrderedItem>>();
 		comparers.add(new DateComparer());
 
-		List<IOrderedItem> sortedList = new ItemSorter(comparers).sort(Arrays.asList(items));
+		List<? extends IOrderedItem> sortedList = new ItemSorter(comparers).sort(items);
 		assertOrder(sortedList, "abcd");
 	}
 	
 	@Test
 	void itemsSortedByOrder() {
 		ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
-		SimpleOrderedItem[] items = new SimpleOrderedItem[] {
-			new SimpleOrderedItem('c', 2, now),
-			new SimpleOrderedItem('d', 3, now.plusDays(1)),
-			new SimpleOrderedItem('b', 1, now.plusDays(2)),
-			new SimpleOrderedItem('a', 0, now.plusMonths(1))
-		};
+		List<SimpleOrderedItem> items = new ArrayList<>();
+		items.add(new SimpleOrderedItem('c', 2, now));
+		items.add(new SimpleOrderedItem('d', 3, now.plusDays(1)));
+		items.add(new SimpleOrderedItem('b', 1, now.plusDays(2)));
+		items.add(new SimpleOrderedItem('a', 0, now.plusMonths(1)));
 		
 		List<Comparator<IOrderedItem>> comparers = new ArrayList<Comparator<IOrderedItem>>();
 		comparers.add(new OrderComparer());
 		
-		List<IOrderedItem> sortedList = new ItemSorter(comparers).sort(Arrays.asList(items));
+		List<? extends IOrderedItem> sortedList = new ItemSorter(comparers).sort(items);
 		assertOrder(sortedList, "abcd");
 	}
 	
@@ -60,12 +59,12 @@ class SorterTests {
 		comparers.add(new DateComparer());
 		comparers.add(new OrderComparer());
 
-		List<IOrderedItem> sortedList = new ItemSorter(comparers).sort(Arrays.asList(items));
+		List<? extends IOrderedItem> sortedList = new ItemSorter(comparers).sort(Arrays.asList(items));
 
 		assertOrder(sortedList, "abcd");
 	}
 	
-	private void assertOrder(List<IOrderedItem> sortedList, String expectedIdOrder) {
+	private void assertOrder(List<? extends IOrderedItem> sortedList, String expectedIdOrder) {
 		Assert.assertTrue(sortedList.size() == expectedIdOrder.length());
 		for (short i = 0; i < expectedIdOrder.length(); ++i) {
 			SimpleOrderedItem item = (SimpleOrderedItem)sortedList.get(i);

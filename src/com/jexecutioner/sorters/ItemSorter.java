@@ -11,7 +11,7 @@ public class ItemSorter implements ISorter {
 	public ItemSorter(List<Comparator<IOrderedItem>> comparers) { _comparers = comparers; }
 
 	@Override
-	public List<IOrderedItem> sort(List<IOrderedItem> collection) {
+	public List<? extends IOrderedItem> sort(List<? extends IOrderedItem> collection) {
 		Comparator<IOrderedItem> newComparer = null;
 
 		if (_comparers.size() == 1) newComparer = _comparers.get(0);
