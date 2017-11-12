@@ -1,17 +1,20 @@
 package com.jexecutioner.contracts.ScriptLoaders;
 
 import java.io.*;
+
 import java.util.*;
 
 import com.jexecutioner.contracts.*;
 import com.jexecutioner.contracts.ScriptLoader.*;
+import com.jexecutioner.sorters.ISorter;
 
 public class TestScriptLoader extends ScriptLoader {
 	private static final String RESOURCE_NAME = "InMemory";
 	private String _xml;
 	private List<ScriptDocument> _documents;
 	
-	public TestScriptLoader(String xml) {
+	public TestScriptLoader(String xml, ISorter sorter) {
+		super(sorter);
 		_xml = xml;
 		_documents = new ArrayList<ScriptDocument>();
 	}

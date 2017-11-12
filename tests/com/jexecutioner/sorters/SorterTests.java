@@ -25,7 +25,7 @@ class SorterTests {
 		List<Comparator<IOrderedItem>> comparers = new ArrayList<Comparator<IOrderedItem>>();
 		comparers.add(new DateComparer());
 
-		List<IOrderedItem> sortedList = new ItemSorter().sort(Arrays.asList(items), comparers);
+		List<IOrderedItem> sortedList = new ItemSorter(comparers).sort(Arrays.asList(items));
 		assertOrder(sortedList, "abcd");
 	}
 	
@@ -42,7 +42,7 @@ class SorterTests {
 		List<Comparator<IOrderedItem>> comparers = new ArrayList<Comparator<IOrderedItem>>();
 		comparers.add(new OrderComparer());
 		
-		List<IOrderedItem> sortedList = new ItemSorter().sort(Arrays.asList(items), comparers);
+		List<IOrderedItem> sortedList = new ItemSorter(comparers).sort(Arrays.asList(items));
 		assertOrder(sortedList, "abcd");
 	}
 	
@@ -60,7 +60,7 @@ class SorterTests {
 		comparers.add(new DateComparer());
 		comparers.add(new OrderComparer());
 
-		List<IOrderedItem> sortedList = new ItemSorter().sort(Arrays.asList(items), comparers);
+		List<IOrderedItem> sortedList = new ItemSorter(comparers).sort(Arrays.asList(items));
 
 		assertOrder(sortedList, "abcd");
 	}

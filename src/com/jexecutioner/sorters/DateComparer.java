@@ -4,7 +4,6 @@ import java.util.*;
 
 import com.jexecutioner.contracts.IOrderedItem;
 
-//TODO(Logan) -> Create unit tests around the date sorter
 public class DateComparer implements Comparator<IOrderedItem> {
 	
 	@Override

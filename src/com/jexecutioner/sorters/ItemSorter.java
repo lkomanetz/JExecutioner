@@ -5,13 +5,17 @@ import java.util.*;
 import com.jexecutioner.contracts.IOrderedItem;
 
 public class ItemSorter implements ISorter {
+	
+	private List<Comparator<IOrderedItem>> _comparers;
+
+	public ItemSorter(List<Comparator<IOrderedItem>> comparers) { _comparers = comparers; }
 
 	@Override
-	public List<IOrderedItem> sort(List<IOrderedItem> collection, List<Comparator<IOrderedItem>> comparers) {
+	public List<IOrderedItem> sort(List<IOrderedItem> collection) {
 		Comparator<IOrderedItem> newComparer = null;
 
-		if (comparers.size() == 1) newComparer = comparers.get(0);
-		else if (comparers.size() > 1) newComparer = buildCompoundComparator(comparers);
+		if (_comparers.size() == 1) newComparer = _comparers.get(0);
+		else if (_comparers.size() > 1) newComparer = buildCompoundComparer(_comparers);
 		
 		List<IOrderedItem> newList = new ArrayList<IOrderedItem>();
 		collection.stream()
@@ -21,7 +25,7 @@ public class ItemSorter implements ISorter {
 		return newList;
 	}
 
-	private Comparator<IOrderedItem> buildCompoundComparator(List<Comparator<IOrderedItem>> comparers) {
+	private Comparator<IOrderedItem> buildCompoundComparer(List<Comparator<IOrderedItem>> comparers) {
 			Comparator<IOrderedItem> newComparer = null;
 			for (short i = 0; i < comparers.size(); ++i) {
 				if ((i + 1) < comparers.size()) {

@@ -2,8 +2,10 @@ package com.jexecutioner.contracts;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
+
 import com.jexecutioner.contracts.ScriptLoader.ScriptLoader;
 import com.jexecutioner.contracts.ScriptLoaders.*;
+import com.jexecutioner.sorters.ISorter;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
@@ -16,12 +18,14 @@ class ScriptLoaderTests {
 
 	private ZonedDateTime _now;
 	private UUID _sysId;
+	private ISorter _sorter;
 
 	@BeforeEach
 	void setup() {
 		ZonedDateTime tmp = ZonedDateTime.now(ZoneOffset.UTC);
 		_now = ZonedDateTime.of(tmp.getYear(), tmp.getMonthValue(), tmp.getDayOfMonth(), 0, 0 , 0, 0, tmp.getZone());
 		_sysId = UUID.randomUUID();
+		_sorter = new MockSorter();
 	}
 	
 	@Test
@@ -30,7 +34,7 @@ class ScriptLoaderTests {
 			int scriptCount = 4;
 			int order = 0;
 			String xml = buildScriptDocumentXml(_now, order, scriptCount);
-			ScriptLoader loader = new TestScriptLoader(xml);
+			ScriptLoader loader = new TestScriptLoader(xml, _sorter);
 			loader.loadDocuments();
 			
 			List<ScriptDocument> sDocs = loader.getDocuments();

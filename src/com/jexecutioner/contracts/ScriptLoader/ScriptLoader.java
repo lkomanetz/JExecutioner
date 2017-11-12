@@ -11,10 +11,16 @@ import javax.xml.parsers.*;
 
 import org.w3c.dom.*;
 
-import com.jexecutioner.contracts.Script;
-import com.jexecutioner.contracts.ScriptDocument;
+import com.jexecutioner.contracts.*;
+import com.jexecutioner.sorters.*;
 
 public abstract class ScriptLoader {
+	
+	private ISorter _sorter;
+	
+	protected ScriptLoader(ISorter sorter) {
+		_sorter = sorter;
+	}
 	
 	public abstract List<ScriptDocument> getDocuments();
 	public abstract void loadDocuments();
@@ -36,7 +42,9 @@ public abstract class ScriptLoader {
 
 			switch (childElement.getNodeName()) {
 				case ScriptLoaderConstants.SCRIPTS_NODE:
-					sDoc.setScripts(createScripts(childElement, sDoc.getSysId()));
+					List<Script> scripts = createScripts(childElement, sDoc.getSysId());
+					scripts = _sorter.sort(scripts);
+					sDoc.setScripts(scripts);
 					break;
 				case ScriptLoaderConstants.DOCUMENT_ORDER_NODE:
 					SimpleEntry<ZonedDateTime, Integer> dateOrderPair = parseOrderAttribute(childElement.getTextContent());
@@ -73,7 +81,7 @@ public abstract class ScriptLoader {
 
 			scripts.add(script);
 		}
-
+		
 		return scripts;
 	}
 	
