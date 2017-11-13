@@ -2,9 +2,8 @@ package com.jexecutioner.contracts;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
-
-import com.jexecutioner.contracts.ScriptLoader.ScriptLoader;
 import com.jexecutioner.contracts.ScriptLoaders.*;
+import com.jexecutioner.scriptloader.ScriptLoader;
 import com.jexecutioner.sorters.ISorter;
 
 import java.time.*;

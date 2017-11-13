@@ -5,7 +5,7 @@ import java.io.*;
 import java.util.*;
 
 import com.jexecutioner.contracts.*;
-import com.jexecutioner.contracts.ScriptLoader.*;
+import com.jexecutioner.scriptloader.*;
 import com.jexecutioner.sorters.ISorter;
 
 public class TestScriptLoader extends ScriptLoader {

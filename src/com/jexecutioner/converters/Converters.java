@@ -12,5 +12,13 @@ public class Converters {
 		}
 		return scripts;
 	};
+	
+	public static final IConverter<List<ScriptDocument>, List<? extends IOrderedItem>> toScriptDocuments = (items) -> {
+		List<ScriptDocument> docs = new ArrayList<>();
+		for (IOrderedItem item : items) {
+			docs.add((ScriptDocument)item);
+		}
+		return docs;
+	};
 
 }

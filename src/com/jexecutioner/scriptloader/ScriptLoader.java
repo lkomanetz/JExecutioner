@@ -1,4 +1,4 @@
-package com.jexecutioner.contracts.ScriptLoader;
+package com.jexecutioner.scriptloader;
 
 import java.io.*;
 
@@ -25,7 +25,7 @@ public abstract class ScriptLoader {
 	}
 	
 	public abstract List<ScriptDocument> getDocuments();
-	public abstract void loadDocuments();
+	public abstract void loadDocuments() throws FileNotFoundException;
 	
 	protected ScriptDocument createScriptDocument(InputStream iStream, String resourceName) throws 
 		ParserConfigurationException,

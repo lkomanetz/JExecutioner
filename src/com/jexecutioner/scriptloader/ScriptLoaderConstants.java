@@ -1,6 +1,6 @@
-package com.jexecutioner.contracts.ScriptLoader;
+package com.jexecutioner.scriptloader;
 
-public final class ScriptLoaderConstants {
+final class ScriptLoaderConstants {
 	
 	public static final String FILE_EXTENSION = ".sdoc";
 	public static final String ROOT_NODE = "ScriptDocument";
