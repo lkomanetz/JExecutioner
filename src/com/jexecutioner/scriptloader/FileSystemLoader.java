@@ -26,6 +26,8 @@ public class FileSystemLoader extends ScriptLoader {
 	public void loadDocuments() throws FileNotFoundException {
 		
 		File folder = new File(_rootDirectory);
+		if (!folder.exists()) folder.mkdir();
+
 		File[] files = folder.listFiles();
 		List<ScriptDocument> docs = new ArrayList<>();
 
